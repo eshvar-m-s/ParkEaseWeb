@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exit vehicle | ParkEase</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}" aria-label="ParkEase home"><span class="brand-mark" aria-hidden="true">P</span><span>Park<span class="brand-accent">Ease</span></span></a>
+        <div class="topbar-note"><span class="live-dot"></span> Vehicle exit</div>
+    </header>
+    <main class="main-content form-page">
+        <a class="back-link" th:href="@{/}"><span aria-hidden="true">←</span> Back to dashboard</a>
+        <section class="form-intro" aria-labelledby="page-title">
+            <p class="eyebrow">PARKING EXIT</p>
+            <h1 id="page-title">Exit a vehicle</h1>
+            <p class="welcome-copy">Select the ticket and enter how many hours the vehicle was parked.</p>
+        </section>
+        <section class="panel vehicle-form-panel" aria-labelledby="exit-details-title">
+            <div class="form-panel-heading"><div><h2 id="exit-details-title">Exit details</h2><p>Partial hours round up; billing is capped at 8 hours.</p></div></div>
+            <form class="vehicle-form" method="post" th:action="@{/exit}">
+                <div class="form-error" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+                <div class="form-field">
+                    <label for="ticketNumber">Parking ticket</label>
+                    <select id="ticketNumber" name="ticketNumber" required th:disabled="${#lists.isEmpty(activeTickets)}">
+                        <option value="" disabled th:selected="${ticketNumber == null}">Select a ticket</option>
+                        <option th:each="ticket : ${activeTickets}" th:value="${ticket.ticketNumber}"
+                                th:selected="${ticketNumber == ticket.ticketNumber}"
+                                th:text="${ticket.ticketNumber + ' — ' + ticket.numberPlate + ' (' + ticket.vehicleType + ')'}">T-1001 — TN37AB1234 (CAR)</option>
+                    </select>
+                    <span class="field-hint" th:if="${#lists.isEmpty(activeTickets)}">There are no vehicles currently parked. Park a vehicle first.</span>
+                </div>
+                <div class="form-field">
+                    <label for="hoursParked">Hours parked</label>
+                    <input id="hoursParked" name="hoursParked" type="number" min="0.1" max="24" step="0.1" placeholder="e.g. 2 or 2.5" th:value="${hoursParked}" required>
+                    <span class="field-hint">Rates: Bike Rs. 10/hour, Car Rs. 30/hour, Truck Rs. 60/hour.</span>
+                </div>
+                <div class="form-notice"><span class="notice-icon" aria-hidden="true">i</span> The fee is calculated in whole hours, rounding partial hours up, with an 8-hour daily cap.</div>
+                <div class="form-actions"><a class="secondary-button" th:href="@{/}">Cancel</a><button class="submit-button" type="submit" th:disabled="${#lists.isEmpty(activeTickets)}">Calculate and exit <span aria-hidden="true">→</span></button></div>
+            </form>
+        </section>
+    </main>
+    <footer class="footer"><span>ParkEase</span><span>Smart parking, made simple.</span></footer>
+</div>
+</body>
+</html>

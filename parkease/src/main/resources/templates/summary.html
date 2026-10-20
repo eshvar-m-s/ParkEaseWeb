@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking summary | ParkEase</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}" aria-label="ParkEase home"><span class="brand-mark" aria-hidden="true">P</span><span>Park<span class="brand-accent">Ease</span></span></a>
+        <div class="topbar-note"><span class="live-dot"></span> Parking summary</div>
+    </header>
+    <main class="main-content">
+        <a class="back-link" th:href="@{/}"><span aria-hidden="true">←</span> Back to dashboard</a>
+        <section class="form-intro" aria-labelledby="page-title">
+            <p class="eyebrow">PARKING REPORT</p>
+            <h1 id="page-title">Parking summary</h1>
+            <p class="welcome-copy">A summary of entries and payments since this app was started.</p>
+        </section>
+
+        <section class="summary-grid report-summary-grid" aria-label="Parking totals">
+            <article class="summary-card"><div class="card-topline"><span class="card-label">Vehicles parked</span><span class="card-icon icon-blue" aria-hidden="true">▦</span></div><p class="card-value" th:text="${totalVehiclesParked}">0</p><p class="card-help">Total entries this session</p></article>
+            <article class="summary-card"><div class="card-topline"><span class="card-label">Currently parked</span><span class="card-icon icon-orange" aria-hidden="true">◉</span></div><p class="card-value" th:text="${activeVehicleCount}">0</p><p class="card-help">Vehicles still in the lot</p></article>
+            <article class="summary-card"><div class="card-topline"><span class="card-label">Slots in use</span><span class="card-icon icon-green" aria-hidden="true">✓</span></div><p class="card-value" th:text="${occupiedSlotCount}">0</p><p class="card-help">Includes two slots per truck</p></article>
+            <article class="summary-card"><div class="card-topline"><span class="card-label">Total collection</span><span class="card-icon icon-purple" aria-hidden="true">₹</span></div><p class="card-value collection-value" th:text="${'Rs. ' + totalCollection}">Rs. 0</p><p class="card-help">Charges collected on exit</p></article>
+        </section>
+
+        <section class="panel report-panel" aria-labelledby="active-vehicles-title">
+            <div class="panel-heading report-heading"><div><p class="eyebrow">LIVE STATUS</p><h2 id="active-vehicles-title">Currently parked vehicles</h2></div><a class="secondary-button compact-button" th:href="@{/park}">Park vehicle</a></div>
+            <div class="empty-state" th:if="${#lists.isEmpty(activeTickets)}">No vehicles are currently parked.</div>
+            <div class="table-wrap" th:unless="${#lists.isEmpty(activeTickets)}">
+                <table class="vehicle-table">
+                    <thead><tr><th>Ticket</th><th>Plate</th><th>Owner</th><th>Type</th><th>Slot(s)</th></tr></thead>
+                    <tbody>
+                    <tr th:each="ticket : ${activeTickets}">
+                        <td th:text="${ticket.ticketNumber}">T-1001</td>
+                        <td th:text="${ticket.numberPlate}">TN37AB1234</td>
+                        <td th:text="${ticket.ownerName}">Owner</td>
+                        <td th:text="${#strings.capitalize(#strings.toLowerCase(ticket.vehicleType))}">Car</td>
+                        <td th:if="${ticket.slotsNeeded == 1}" th:text="${'P' + #numbers.formatInteger(ticket.firstSlot, 2)}">P01</td>
+                        <td th:if="${ticket.slotsNeeded > 1}" th:text="${'P' + #numbers.formatInteger(ticket.firstSlot, 2) + ' – P' + #numbers.formatInteger(ticket.firstSlot + 1, 2)}">P01 – P02</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="report-actions"><a class="secondary-button" th:href="@{/}">Dashboard</a><a class="submit-button" th:href="@{/exit}">Exit vehicle <span aria-hidden="true">→</span></a></div>
+        </section>
+        <p class="report-note">This summary is loaded from the local database and is retained when the application restarts.</p>
+    </main>
+    <footer class="footer"><span>ParkEase</span><span>Smart parking, made simple.</span></footer>
+</div>
+</body>
+</html>

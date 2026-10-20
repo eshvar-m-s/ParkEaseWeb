@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park a Vehicle | ParkEase</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}" aria-label="ParkEase home">
+            <span class="brand-mark" aria-hidden="true">P</span>
+            <span>Park<span class="brand-accent">Ease</span></span>
+        </a>
+        <div class="topbar-note"><span class="live-dot"></span> New parking entry</div>
+    </header>
+
+    <main class="main-content form-page">
+        <a class="back-link" th:href="@{/}"><span aria-hidden="true">←</span> Back to dashboard</a>
+
+        <section class="form-intro" aria-labelledby="page-title">
+            <p class="eyebrow">PARKING ENTRY</p>
+            <h1 id="page-title">Park a vehicle</h1>
+            <p class="welcome-copy">Enter the vehicle details below to prepare a new parking ticket.</p>
+        </section>
+
+        <section class="panel vehicle-form-panel" aria-labelledby="vehicle-details-title">
+            <div class="form-panel-heading">
+                <div>
+                    <h2 id="vehicle-details-title">Vehicle details</h2>
+                    <p>All fields are required.</p>
+                </div>
+                <span class="form-step">STEP 1 OF 1</span>
+            </div>
+
+            <form class="vehicle-form" method="post" th:action="@{/park}">
+                <div class="form-error" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+                <div class="form-field">
+                    <label for="vehicleType">Vehicle type</label>
+                    <select id="vehicleType" name="vehicleType" required>
+                        <option value="" disabled th:selected="${vehicleType == null}">Select a vehicle type</option>
+                        <option value="BIKE" th:selected="${vehicleType == 'BIKE'}">Bike</option>
+                        <option value="CAR" th:selected="${vehicleType == 'CAR'}">Car</option>
+                        <option value="TRUCK" th:selected="${vehicleType == 'TRUCK'}">Truck</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label for="numberPlate">Number plate</label>
+                    <input id="numberPlate" name="numberPlate" type="text" placeholder="e.g. TN37AB1234" autocomplete="off" maxlength="12" th:value="${numberPlate}" required>
+                    <span class="field-hint">Use 6–12 letters or digits, for example TN37AB1234.</span>
+                </div>
+
+                <div class="form-field">
+                    <label for="ownerName">Owner name</label>
+                    <input id="ownerName" name="ownerName" type="text" placeholder="Enter the owner's name" autocomplete="name" th:value="${ownerName}" required>
+                </div>
+
+                <div class="form-notice"><span class="notice-icon" aria-hidden="true">i</span> Parking records are saved in the local database and remain after the app stops.</div>
+
+                <div class="form-actions">
+                    <a class="secondary-button" th:href="@{/}">Cancel</a>
+                    <button class="submit-button" type="submit">Park vehicle <span aria-hidden="true">→</span></button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer"><span>ParkEase</span><span>Smart parking, made simple.</span></footer>
+</div>
+</body>
+</html>

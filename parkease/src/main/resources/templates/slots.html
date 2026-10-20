@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live slot map | ParkEase</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}" aria-label="ParkEase home"><span class="brand-mark" aria-hidden="true">P</span><span>Park<span class="brand-accent">Ease</span></span></a>
+        <div class="topbar-note"><span class="live-dot"></span> Live slot map</div>
+    </header>
+    <main class="main-content">
+        <a class="back-link" th:href="@{/}"><span aria-hidden="true">←</span> Back to dashboard</a>
+        <section class="form-intro" aria-labelledby="page-title">
+            <p class="eyebrow">LIVE STATUS</p>
+            <h1 id="page-title">Parking slot map</h1>
+            <p class="welcome-copy">Occupied slots show the vehicle plate and ticket number.</p>
+        </section>
+
+        <section class="slot-map-summary" aria-label="Slot availability">
+            <div class="capacity-pill"><span class="status-dot"></span> <strong th:text="${availableSlots}">20</strong> free</div>
+            <div class="capacity-pill"><span class="legend-dot occupied-dot"></span> <strong th:text="${occupiedSlots}">0</strong> occupied</div>
+            <a class="submit-button" th:href="@{/park}">Park vehicle <span aria-hidden="true">→</span></a>
+        </section>
+
+        <section class="panel detailed-map-panel" aria-label="Details for all 20 parking slots">
+            <div class="slot-grid slot-grid-large">
+                <article class="slot-card slot-card-large" th:each="slot : ${slotStatuses}"
+                         th:classappend="${slot.occupied} ? ' slot-card-occupied' : ''">
+                    <span class="slot-number" th:text="${'P' + #numbers.formatInteger(slot.slotNumber, 2)}">P01</span>
+                    <span class="slot-status" th:classappend="${slot.occupied} ? ' occupied-status' : ''">
+                        <i class="status-dot"></i>
+                        <span th:text="${slot.occupied} ? 'Occupied' : 'Free'">Free</span>
+                    </span>
+                    <div class="slot-vehicle-info" th:if="${slot.occupied}">
+                        <strong th:text="${slot.numberPlate}">TN37AB1234</strong>
+                        <span th:text="${#strings.capitalize(#strings.toLowerCase(slot.vehicleType))}">Car</span>
+                        <small th:text="${slot.ticketNumber}">T-1001</small>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <p class="report-note">A truck uses two consecutive slots, so its details appear in both slot cards.</p>
+    </main>
+    <footer class="footer"><span>ParkEase</span><span>Smart parking, made simple.</span></footer>
+</div>
+</body>
+</html>

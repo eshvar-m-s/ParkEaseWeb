@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEase | Smart Parking</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}" aria-label="ParkEase home">
+            <span class="brand-mark" aria-hidden="true">P</span>
+            <span>Park<span class="brand-accent">Ease</span></span>
+        </a>
+        <div class="topbar-note"><span class="live-dot"></span> Parking overview</div>
+    </header>
+
+    <main class="main-content">
+        <section class="welcome-row" aria-labelledby="page-title">
+            <div>
+                <p class="eyebrow">SMART PARKING LOT</p>
+                <h1 id="page-title">Good day, Attendant</h1>
+                <p class="welcome-copy">Here is the current overview of your parking lot.</p>
+            </div>
+            <div class="capacity-pill"><span class="capacity-icon" aria-hidden="true">⌖</span> Capacity <strong th:text="${totalSlots}">20</strong> slots</div>
+        </section>
+
+        <section class="summary-grid" aria-label="Parking summary">
+            <article class="summary-card">
+                <div class="card-topline"><span class="card-label">Total slots</span><span class="card-icon icon-blue" aria-hidden="true">▦</span></div>
+                <p class="card-value" th:text="${totalSlots}">20</p>
+                <p class="card-help">Across the parking lot</p>
+            </article>
+            <article class="summary-card">
+                <div class="card-topline"><span class="card-label">Occupied</span><span class="card-icon icon-orange" aria-hidden="true">◉</span></div>
+                <p class="card-value" th:text="${occupiedSlots}">0</p>
+                <p class="card-help">Currently in use</p>
+            </article>
+            <article class="summary-card">
+                <div class="card-topline"><span class="card-label">Available</span><span class="card-icon icon-green" aria-hidden="true">✓</span></div>
+                <p class="card-value" th:text="${availableSlots}">20</p>
+                <p class="card-help">Ready for vehicles</p>
+            </article>
+            <article class="summary-card">
+                <div class="card-topline"><span class="card-label">Total collection</span><span class="card-icon icon-purple" aria-hidden="true">₹</span></div>
+                <p class="card-value collection-value" th:text="${totalCollection}">Rs. 0</p>
+                <p class="card-help">Collected so far</p>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel parking-panel" aria-labelledby="slot-map-title">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">LIVE STATUS</p>
+                        <h2 id="slot-map-title">Parking slot map</h2>
+                    </div>
+                    <span class="slot-count"><span th:text="${totalSlots}">20</span> slots</span>
+                </div>
+
+                <div class="legend" aria-label="Slot status legend">
+                    <span><i class="legend-dot free-dot"></i>Free</span>
+                    <span><i class="legend-dot occupied-dot"></i>Occupied</span>
+                </div>
+
+                <div class="slot-grid" aria-label="Parking slot map">
+                    <div class="slot-card" th:each="slotNumber : ${slotNumbers}">
+                        <span class="slot-number" th:text="${'P' + #numbers.formatInteger(slotNumber, 2)}">P01</span>
+                        <span class="slot-status" th:classappend="${occupiedSlotNumbers.contains(slotNumber)} ? ' occupied-status' : ''">
+                            <i class="status-dot"></i><span th:text="${occupiedSlotNumbers.contains(slotNumber)} ? 'Occupied' : 'Free'">Free</span>
+                        </span>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="panel actions-panel" aria-labelledby="quick-actions-title">
+                <p class="eyebrow">GET STARTED</p>
+                <h2 id="quick-actions-title">Quick actions</h2>
+                <p class="actions-copy">Park and exit vehicles, or use the other tools as they are added.</p>
+
+                <div class="action-list">
+                    <a class="action-button primary-action" th:href="@{/park}">
+                        <span class="action-symbol" aria-hidden="true">+</span>
+                        <span>Park vehicle</span>
+                        <span class="action-arrow" aria-hidden="true">→</span>
+                    </a>
+                    <a class="action-button" th:href="@{/exit}">
+                        <span class="action-symbol exit-symbol" aria-hidden="true">↗</span>
+                        <span>Exit vehicle</span>
+                        <span class="action-arrow" aria-hidden="true">→</span>
+                    </a>
+                    <a class="action-button" th:href="@{/slots}">
+                        <span class="action-symbol map-symbol" aria-hidden="true">▦</span>
+                        <span>Slot map</span>
+                        <span class="action-arrow" aria-hidden="true">→</span>
+                    </a>
+                    <a class="action-button" th:href="@{/summary}">
+                        <span class="action-symbol summary-symbol" aria-hidden="true">▤</span>
+                        <span>Summary</span>
+                        <span class="action-arrow" aria-hidden="true">→</span>
+                    </a>
+                </div>
+                <p class="coming-soon"><span aria-hidden="true">✦</span> View current vehicle details on the slot map</p>
+            </aside>
+        </section>
+    </main>
+
+    <footer class="footer"><span>ParkEase</span><span>Smart parking, made simple.</span></footer>
+</div>
+</body>
+</html>

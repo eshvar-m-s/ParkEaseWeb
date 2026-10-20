@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exit receipt | ParkEase</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}" aria-label="ParkEase home"><span class="brand-mark" aria-hidden="true">P</span><span>Park<span class="brand-accent">Ease</span></span></a>
+        <div class="topbar-note"><span class="live-dot"></span> Exit completed</div>
+    </header>
+    <main class="main-content form-page">
+        <section class="form-intro" aria-labelledby="page-title">
+            <p class="eyebrow">PAYMENT RECEIPT</p>
+            <h1 id="page-title">Vehicle exited</h1>
+            <p class="welcome-copy">The parking charge has been added to the collection total.</p>
+        </section>
+        <section class="panel vehicle-form-panel ticket-panel" aria-label="Exit receipt details">
+            <div class="ticket-number" th:text="${receipt.ticket.ticketNumber}">T-1001</div>
+            <dl class="ticket-details">
+                <div><dt>Number plate</dt><dd th:text="${receipt.ticket.numberPlate}">TN37AB1234</dd></div>
+                <div><dt>Time parked</dt><dd><span th:text="${#numbers.formatDecimal(receipt.hoursParked, 1, 1)}">2.0</span> hours</dd></div>
+                <div><dt>Billable hours</dt><dd th:text="${receipt.billedHours}">2</dd></div>
+                <div><dt>Hourly rate</dt><dd th:text="${'Rs. ' + receipt.hourlyRate}">Rs. 30</dd></div>
+                <div><dt>Charge</dt><dd th:text="${'Rs. ' + receipt.charge}">Rs. 60</dd></div>
+                <div><dt>Freed slot<span th:if="${receipt.ticket.slotsNeeded > 1}">s</span></dt>
+                    <dd th:if="${receipt.ticket.slotsNeeded == 1}" th:text="${'P' + #numbers.formatInteger(receipt.ticket.firstSlot, 2)}">P01</dd>
+                    <dd th:if="${receipt.ticket.slotsNeeded > 1}" th:text="${'P' + #numbers.formatInteger(receipt.ticket.firstSlot, 2) + ' – P' + #numbers.formatInteger(receipt.ticket.firstSlot + 1, 2)}">P01 – P02</dd>
+                </div>
+            </dl>
+            <div class="form-actions"><a class="secondary-button" th:href="@{/exit}">Exit another vehicle</a><a class="submit-button" th:href="@{/}">Back to dashboard <span aria-hidden="true">→</span></a></div>
+        </section>
+    </main>
+    <footer class="footer"><span>ParkEase</span><span>Smart parking, made simple.</span></footer>
+</div>
+</body>
+</html>

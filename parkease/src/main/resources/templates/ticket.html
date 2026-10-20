@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking ticket | ParkEase</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}" aria-label="ParkEase home"><span class="brand-mark" aria-hidden="true">P</span><span>Park<span class="brand-accent">Ease</span></span></a>
+        <div class="topbar-note"><span class="live-dot"></span> Parking entry created</div>
+    </header>
+    <main class="main-content form-page">
+        <section class="form-intro" aria-labelledby="page-title">
+            <p class="eyebrow">PARKING TICKET</p>
+            <h1 id="page-title">Vehicle parked</h1>
+            <p class="welcome-copy">Give this ticket number to the vehicle owner.</p>
+        </section>
+        <section class="panel vehicle-form-panel ticket-panel" aria-label="Parking ticket details">
+            <div class="ticket-number" th:text="${ticket.ticketNumber}">T-1001</div>
+            <dl class="ticket-details">
+                <div><dt>Vehicle type</dt><dd th:text="${#strings.capitalize(#strings.toLowerCase(ticket.vehicleType))}">Car</dd></div>
+                <div><dt>Number plate</dt><dd th:text="${ticket.numberPlate}">TN37AB1234</dd></div>
+                <div><dt>Owner name</dt><dd th:text="${ticket.ownerName}">Owner</dd></div>
+                <div><dt>Assigned slot<span th:if="${ticket.slotsNeeded > 1}">s</span></dt>
+                    <dd th:if="${ticket.slotsNeeded == 1}" th:text="${'P' + #numbers.formatInteger(ticket.firstSlot, 2)}">P01</dd>
+                    <dd th:if="${ticket.slotsNeeded > 1}" th:text="${'P' + #numbers.formatInteger(ticket.firstSlot, 2) + ' – P' + #numbers.formatInteger(ticket.firstSlot + 1, 2)}">P01 – P02</dd>
+                </div>
+            </dl>
+            <div class="form-notice"><span class="notice-icon" aria-hidden="true">i</span> This ticket is saved in the local database.</div>
+            <div class="form-actions"><a class="secondary-button" th:href="@{/park}">Park another</a><a class="submit-button" th:href="@{/}">Back to dashboard <span aria-hidden="true">→</span></a></div>
+        </section>
+    </main>
+    <footer class="footer"><span>ParkEase</span><span>Smart parking, made simple.</span></footer>
+</div>
+</body>
+</html>
